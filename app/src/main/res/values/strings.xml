@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Расписание ДГТУ</string>
+    <string name="week_button">Неделя</string>
+    <string name="to_even_week">К нижней неделе</string>
+    <string name="to_nor_even_week">К верхней неделе</string>
+</resources>

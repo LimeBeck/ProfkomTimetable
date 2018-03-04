@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "307576896036",
+    "firebase_url": "https://profkomtimetable.firebaseio.com",
+    "project_id": "profkomtimetable",
+    "storage_bucket": "profkomtimetable.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:307576896036:android:8adcc7b672c5e7bd",
+        "android_client_info": {
+          "package_name": "ru.profdstu.profkomtimetable"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "307576896036-g40qbsoafs0919t36uuhv18gcuvlj86m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ru.profdstu.profkomtimetable",
+            "certificate_hash": "ff45dc8aa0ffa607671502ecdba31eaac7e43b62"
+          }
+        },
+        {
+          "client_id": "307576896036-o9tisa3cs8j4errr0unpip8mnm0ctha9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCz7HBKvmbFAxEkMNJQZ3fUHykQ9qL1Sc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "307576896036-o9tisa3cs8j4errr0unpip8mnm0ctha9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
