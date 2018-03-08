@@ -3,4 +3,11 @@
     <string name="week_button">Неделя</string>
     <string name="to_even_week">К нижней неделе</string>
     <string name="to_nor_even_week">К верхней неделе</string>
+    <string name="settings">Настройки</string>
+    <string name="monday">Понедельник</string>
+    <string name="tuesday">Вторник</string>
+    <string name="wednesday">Среда</string>
+    <string name="Thursday">Четверг</string>
+    <string name="Friday">Пятница</string>
+    <string name="Saturday">Суббота</string>
 </resources>

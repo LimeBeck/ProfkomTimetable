@@ -4,6 +4,10 @@ package ru.profdstu.profkomtimetable;
  * Created by metal on 03.03.2018.
  */
 
+/*
+Схема БД для удобства работы
+ */
+
 public class LessonDbSchema {
     public static final class LessonTable{
         public static final String NAME="lessons";

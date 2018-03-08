@@ -9,6 +9,10 @@ import static ru.profdstu.profkomtimetable.LessonDbSchema.*;
  * Created by metal on 03.03.2018.
  */
 
+/*
+Оболочка для работы с курсором БД
+ */
+
 public class LessonCursorWrapper extends CursorWrapper {
 
     public LessonCursorWrapper(Cursor cursor) {super(cursor);}

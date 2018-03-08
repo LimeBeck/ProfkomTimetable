@@ -8,6 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 /**
  * Created by metal on 03.03.2018.
  */
+/*
+Абстрактный класс одиночного фрагмента, от него наследую потом другие уже
+ */
 
 public abstract class SingleFragmentActivity extends AppCompatActivity {
     protected abstract Fragment createFragment();

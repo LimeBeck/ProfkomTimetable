@@ -10,6 +10,9 @@ import static ru.profdstu.profkomtimetable.LessonDbSchema.*;
  * Created by metal on 03.03.2018.
  */
 
+/*
+Класс для работы с БД, создание БД если её еще нет
+ */
 public class LessonBaseHelper extends SQLiteOpenHelper {
     private static final int VERSION = 1;
 

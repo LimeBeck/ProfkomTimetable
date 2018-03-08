@@ -13,6 +13,10 @@ import static ru.profdstu.profkomtimetable.LessonDbSchema.*;
  * Created by metal on 03.03.2018.
  */
 
+/*
+Чтение данных из БД
+ */
+
 public class TimeTableData {
 
     private static TimeTableData sTimeTableData;

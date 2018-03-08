@@ -22,6 +22,11 @@ import java.util.List;
  * Created by metal on 03.03.2018.
  */
 
+/*
+В классе реализована работа с основной активностью, вывод пар на экран
+
+ */
+
 public class LessonsFragment extends Fragment {
 
     private RecyclerView mLessonRecyclerView;
@@ -56,6 +61,8 @@ public class LessonsFragment extends Fragment {
         else{
             weekButton.setTitle(R.string.to_even_week);
         }
+
+        MenuItem settingsButton = menu.findItem(R.id.settings);
     }
 
     @Override
@@ -66,6 +73,7 @@ public class LessonsFragment extends Fragment {
                 getActivity().invalidateOptionsMenu();
                 updateUI();
                 return true;
+
 
             default:
                 return super.onOptionsItemSelected(item);

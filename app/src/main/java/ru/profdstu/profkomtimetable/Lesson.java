@@ -4,6 +4,10 @@ package ru.profdstu.profkomtimetable;
  * Created by metal on 03.03.2018.
  */
 
+/*
+Класс для описания данных
+ */
+
 public class Lesson {
 
     private String mLessonName;
