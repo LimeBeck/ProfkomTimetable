@@ -1,6 +1,6 @@
 package ru.profdstu.profkomtimetable;
 
-import android.content.Intent;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,9 +18,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-/**
- * Created by metal on 03.03.2018.
- */
 
 /*
 В классе реализована работа с основной активностью, вывод пар на экран
@@ -29,15 +26,16 @@ import java.util.List;
 
 public class LessonsFragment extends Fragment {
 
-    private RecyclerView mLessonRecyclerView;
-    private LessonAdapter mAdapter;
+    private RecyclerView mDayRecyclerView;
+    private DayAdapter mAdapter;
+    //private LessonAdapter mAdapter;
     private Boolean mWeekEven = IsWeekEven();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_day_list, container, false);
-        mLessonRecyclerView = (RecyclerView) view.findViewById(R.id.day_recycler_view);
-        mLessonRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mDayRecyclerView = (RecyclerView) view.findViewById(R.id.day_recycler_view);
+        mDayRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         updateUI();
         return view;
@@ -88,29 +86,41 @@ public class LessonsFragment extends Fragment {
 
     public void updateUI(){
         TimeTableData timeTable = TimeTableData.get(getActivity());
-        List<Lesson> lessonList = timeTable.getLessonsList();
+
+        /*List<Lesson> lessonList = timeTable.getLessonsList();
 
         //Тестовый набор данных!!!
-        Lesson first = new Lesson("Первая", "Препод 1", 1,1,1,"8-143");
-        lessonList.add(first);
-        Lesson second = new Lesson("Вторая", "Препод 2", 2,1,1,"8-143");
-        lessonList.add(second);
+        Lesson first = new Lesson("Первая", "Препод 1", 1,2,1,"8-143");
+        timeTable.addLesson(first);
+        Lesson second = new Lesson("Вторая", "Препод 2", 2,2,1,"8-143");
+        timeTable.addLesson(second);
+        Lesson third = new Lesson("Третья", "Препод 2", 2,2,2,"8-143");
+        timeTable.addLesson(third);*/
 
 
         if(mAdapter == null){
+            mAdapter = new DayAdapter(timeTable);
+            mDayRecyclerView.setAdapter(mAdapter);
+        }
+        else{
+            mAdapter.setTimeTableData(timeTable);
+            mAdapter.notifyDataSetChanged();
+        }
+
+        /*if(mAdapter == null){
             mAdapter = new LessonAdapter(lessonList);
             mLessonRecyclerView.setAdapter(mAdapter);
         }
         else{
             mAdapter.setLessonList(lessonList);
             mAdapter.notifyDataSetChanged();
-        }
+        }*/
 
     }
 
-    private Boolean IsWeekEven(){
+    private int Weeks(){
         int days;
-        int firtsSeptemberDay;
+        int firstSeptemberDay;
         Date today = new Date();
         Calendar calendar = new GregorianCalendar();
         Calendar firstSeptember = new GregorianCalendar();
@@ -118,28 +128,32 @@ public class LessonsFragment extends Fragment {
         int todayDay = calendar.get(Calendar.DAY_OF_YEAR);
         if(calendar.get(Calendar.MONTH)>=9){
             firstSeptember.set(calendar.get(Calendar.YEAR),9,1);
-            firtsSeptemberDay = firstSeptember.get(Calendar.DAY_OF_YEAR);
-            days = todayDay - firtsSeptemberDay;
+            firstSeptemberDay = firstSeptember.get(Calendar.DAY_OF_YEAR);
+            days = todayDay - firstSeptemberDay;
         }
         else {
             firstSeptember.set(calendar.get(Calendar.YEAR)-1,9,1);
             Calendar lastDayOfYear = new GregorianCalendar(calendar.get(Calendar.YEAR)-1,12,1);
             int lastDay = lastDayOfYear.get(Calendar.DAY_OF_YEAR);
-            firtsSeptemberDay = firstSeptember.get(Calendar.DAY_OF_YEAR);
+            firstSeptemberDay = firstSeptember.get(Calendar.DAY_OF_YEAR);
 
-            days = firtsSeptemberDay-lastDay+todayDay;
+            days = firstSeptemberDay-lastDay+todayDay;
         }
 
-        int weeks = days/7;
+        return days/7;
+    }
 
+    private Boolean IsWeekEven(){
+        return Weeks() % 2 == 0;
+    }
 
-        if(weeks%2!=0){
-            return false;
+    private int WeekEven(){
+        if(Weeks()%2!=0){
+            return 1;
         }
         else{
-            return true;
+            return 2;
         }
-
     }
 
     private class LessonHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -162,10 +176,12 @@ public class LessonsFragment extends Fragment {
         }
 
         public void bind(Lesson lesson){
-            mLessonNumber.setText(String.valueOf(lesson.getLessonNumber()));
-            mLessonName.setText(lesson.getLessonName());
-            mTeacher.setText(lesson.getTeacherName());
-            mAuditory.setText(lesson.getAuditory());
+            mLesson = lesson;
+
+            mLessonNumber.setText(String.valueOf(mLesson.getLessonNumber()));
+            mLessonName.setText(mLesson.getLessonName());
+            mTeacher.setText(mLesson.getTeacherName());
+            mAuditory.setText(mLesson.getAuditory());
         }
 
         @Override
@@ -198,4 +214,88 @@ public class LessonsFragment extends Fragment {
 
         public void setLessonList(List<Lesson> lessonList){mLessonList = lessonList;}
     }
+
+    private class DayHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        private LessonAdapter mAdapter;
+        private List<Lesson> mLessonsList;
+        private TextView mWeekday;
+        private RecyclerView mLessonRecyclerView;
+
+        public DayHolder(LayoutInflater inflater, ViewGroup parent){
+            super(inflater.inflate(R.layout.fragment_day, parent,false));
+            View view = inflater.inflate(R.layout.fragment_day, parent, false);
+            mLessonRecyclerView = (RecyclerView) view.findViewById(R.id.day_container) ;
+            mDayRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mWeekday = (TextView) itemView.findViewById(R.id.day_of_week_text);
+        }
+
+        public void bind(List<Lesson> lessonsList){
+            mLessonsList = lessonsList;
+
+            switch (lessonsList.get(0).getDayNumber()) {
+                case 1:
+                    mWeekday.setText(R.string.monday);
+                case 2:
+                    mWeekday.setText(R.string.tuesday);
+                case 3:
+                    mWeekday.setText(R.string.wednesday);
+                case 4:
+                    mWeekday.setText(R.string.thursday);
+                case 5:
+                    mWeekday.setText(R.string.friday);
+                case 6:
+                    mWeekday.setText(R.string.saturday);
+                default:
+                    mWeekday.setText("Error");
+
+            }
+
+            if(mAdapter == null){
+                mAdapter = new LessonAdapter(mLessonsList);
+                mLessonRecyclerView.setAdapter(mAdapter);
+            }
+            else{
+                mAdapter.setLessonList(mLessonsList);
+                mAdapter.notifyDataSetChanged();
+            }
+        }
+
+        @Override
+        public void onClick(View view){
+
+        }
+    }
+
+    private class DayAdapter extends RecyclerView.Adapter<DayHolder>{
+
+        private TimeTableData mTimeTableData;
+
+        public DayAdapter(TimeTableData timeTableData){
+            mTimeTableData = timeTableData;
+        }
+
+        @Override
+        public DayHolder onCreateViewHolder (ViewGroup parent, int ViewType){
+            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
+            return new DayHolder(layoutInflater, parent);
+        }
+
+        @Override
+        public void onBindViewHolder(DayHolder holder, int position){
+            List<Lesson> lessonList = mTimeTableData.getLessonByWeekDay(WeekEven(),position+1);
+            holder.bind(lessonList);
+        }
+
+        @Override
+        public int getItemCount(){
+            int count = mTimeTableData.getDaysInWeek(WeekEven());
+            return count;}
+
+        public void setTimeTableData(TimeTableData timeTableData) {
+            mTimeTableData = timeTableData;
+        }
+
+    }
+
 }
