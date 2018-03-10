@@ -8,6 +8,6 @@ public class TimeTable extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment(){
-        return new LessonsFragment();
+        return new TopFragment();
     }
 }

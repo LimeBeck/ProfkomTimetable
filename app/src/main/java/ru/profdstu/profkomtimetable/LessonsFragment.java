@@ -34,7 +34,7 @@ public class LessonsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_day_list, container, false);
-        mDayRecyclerView = (RecyclerView) view.findViewById(R.id.day_recycler_view);
+        mDayRecyclerView = (RecyclerView) view.findViewById(R.id.day_view);
         mDayRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         updateUI();

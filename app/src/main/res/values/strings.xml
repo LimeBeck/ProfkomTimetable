@@ -10,4 +10,6 @@
     <string name="thursday">Четверг</string>
     <string name="friday">Пятница</string>
     <string name="saturday">Суббота</string>
+    <string name="default_day">Ошибка с днём недели</string>
+    <string name="freeday">Пар нет! Ухууууу!</string>
 </resources>

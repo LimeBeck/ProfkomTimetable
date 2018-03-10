@@ -3,9 +3,10 @@ package ru.profdstu.profkomtimetable;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorWrapper;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
-
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,10 +60,15 @@ public class TimeTableData {
 
     public List<Lesson> getLessonByWeekDay (int week, int day){
         List<Lesson> lessons = new ArrayList<>();
-        LessonCursorWrapper cursorWrapper = queryLessons(LessonTable.Cols.DAY_NUMBER+ "= ?"+
-                LessonTable.Cols.WEEK_NUMBER+"= ?",
-                new String[]{String.valueOf(day),String.valueOf(week)});
+        String sql = "SELECT * FROM "+LessonTable.NAME+" WHERE "+LessonTable.Cols.WEEK_NUMBER+"= "+ String.valueOf(week)
+                +" AND "+LessonTable.Cols.DAY_NUMBER+" = "+String.valueOf(day)+" ORDER BY "+LessonTable.Cols.DAY_NUMBER+", "+LessonTable.Cols.LESSON_NUMBER;
+        Cursor raw = mDatabase.rawQuery(sql,null);
+        LessonCursorWrapper cursorWrapper = new LessonCursorWrapper(raw);
+        /*LessonCursorWrapper cursorWrapper = queryLessons(LessonTable.Cols.DAY_NUMBER+ " = ? AND "+
+                LessonTable.Cols.WEEK_NUMBER+" = ? ",
+                new String[]{String.valueOf(day),String.valueOf(week)});*/
         try{
+            cursorWrapper.moveToFirst();
             if (cursorWrapper.getCount()==0){
                 return null;
             }
@@ -79,19 +85,29 @@ public class TimeTableData {
 
     public int getDaysInWeek(int week){
        int days =2;
+        return days;
+    }
 
-
-
-       return days;
+    public Lesson getLessonByUUID(UUID uuid){
+        LessonCursorWrapper cursorWrapper = queryLessons(LessonTable.Cols.LESSON_ID + " = ?", new String[]{uuid.toString()});
+        try {
+            cursorWrapper.moveToFirst();
+            if(cursorWrapper.getCount()==0){
+                return null;
+            }
+            return cursorWrapper.getLesson();
+        }
+        finally {
+            cursorWrapper.close();
+        }
     }
 
     private LessonCursorWrapper queryLessons(String whereClause, String[] whereArgs){
         Cursor cursor = mDatabase.query(LessonTable.NAME,
                 null, whereClause, whereArgs, null, null,
-                LessonTable.Cols.WEEK_NUMBER + ", " +
-                        LessonTable.Cols.DAY_NUMBER + ", " +
-                        LessonTable.Cols.LESSON_NUMBER
+                LessonTable.Cols.LESSON_NUMBER
         );
+
 
         return new LessonCursorWrapper(cursor);
     }
@@ -102,6 +118,7 @@ public class TimeTableData {
 
     private static ContentValues getContentValues(Lesson lesson){
         ContentValues values = new ContentValues();
+        values.put(LessonTable.Cols.LESSON_ID, lesson.getUUID().toString());
         values.put(LessonTable.Cols.AUDITORY, lesson.getAuditory());
         values.put(LessonTable.Cols.DAY_NUMBER, lesson.getDayNumber());
         values.put(LessonTable.Cols.LESSON_NAME, lesson.getLessonName());

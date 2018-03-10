@@ -1,5 +1,7 @@
 package ru.profdstu.profkomtimetable;
 
+import java.util.UUID;
+
 /**
  * Created by metal on 03.03.2018.
  */
@@ -10,6 +12,7 @@ package ru.profdstu.profkomtimetable;
 
 public class Lesson {
 
+    private UUID mUUID;
     private String mLessonName;
     private String mTeacherName;
     private int mLessonNumber;
@@ -17,13 +20,28 @@ public class Lesson {
     private int mDayNumber;
     private String mAuditory;
 
-    public Lesson(String lessonName, String teacherName, int lessonNumber, int weekNumber, int dayNumber, String auditory) {
+    public Lesson(UUID UUID, String lessonName, String teacherName, int lessonNumber, int weekNumber, int dayNumber, String auditory) {
+        mUUID = UUID;
         mLessonName = lessonName;
         mTeacherName = teacherName;
         mLessonNumber = lessonNumber;
         mWeekNumber = weekNumber;
         mDayNumber = dayNumber;
         mAuditory = auditory;
+    }
+
+    public Lesson(String lessonName, String teacherName, int lessonNumber, int weekNumber, int dayNumber, String auditory) {
+        mUUID = UUID.randomUUID();
+        mLessonName = lessonName;
+        mTeacherName = teacherName;
+        mLessonNumber = lessonNumber;
+        mWeekNumber = weekNumber;
+        mDayNumber = dayNumber;
+        mAuditory = auditory;
+    }
+
+    public UUID getUUID() {
+        return mUUID;
     }
 
     public String getLessonName() {

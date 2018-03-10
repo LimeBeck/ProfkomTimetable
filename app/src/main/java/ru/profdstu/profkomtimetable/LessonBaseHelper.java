@@ -24,6 +24,7 @@ public class LessonBaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db){
         db.execSQL("create table "+ LessonTable.NAME + "("+
         "_id integer primary key autoincrement, " +
+                LessonTable.Cols.LESSON_ID+ ", " +
                 LessonTable.Cols.LESSON_NAME + "," +
                 LessonTable.Cols.TEACHER_NAME + "," +
                 LessonTable.Cols.AUDITORY + "," +
