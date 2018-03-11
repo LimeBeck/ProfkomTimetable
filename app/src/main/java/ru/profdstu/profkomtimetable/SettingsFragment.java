@@ -17,6 +17,7 @@ public class SettingsFragment extends Fragment {
 
     private EditText mGroup;
     private Button mOkButton;
+    private Boolean mFirstUse;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,9 +32,11 @@ public class SettingsFragment extends Fragment {
         mGroup = (EditText) v.findViewById(R.id.edit_usergroup);
         String group = timeTableData.getGroupFromSettings();
         if(group!=null){
+            mFirstUse = false;
             mGroup.setText(group);
         }
         else{
+            mFirstUse = true;
             //Сюда дописать чет, надо придумать
         }
 
@@ -41,6 +44,9 @@ public class SettingsFragment extends Fragment {
         mOkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mFirstUse){
+
+                }
                 //Тут будет реализованна загрузка расписания группы с сервера
             }
         });

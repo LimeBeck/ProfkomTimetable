@@ -7,9 +7,11 @@
         android:title="@string/week_button"
         app:showAsAction="ifRoom|withText"
        />
-    <item android:id="@+id/settings"
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_action_name"
         android:title="@string/settings"
-        app:showAsAction="collapseActionView"/>
+        app:showAsAction="ifRoom|withText" />
 
 
 </menu>
