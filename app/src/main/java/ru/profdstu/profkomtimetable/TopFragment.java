@@ -1,5 +1,7 @@
 package ru.profdstu.profkomtimetable;
 
+import android.content.Intent;
+import android.media.audiofx.Equalizer;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,6 +29,14 @@ public class TopFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mFragmentManager = getFragmentManager();
+
+        mTimeTableData = TimeTableData.get(getContext());
+        Lesson first = new Lesson("Первая", "Препод 1", 1,1,5,"8-143");
+        mTimeTableData.addLesson(first);
+        Lesson second = new Lesson("Вторая", "Препод 2", 2,1,5,"8-143");
+        mTimeTableData.addLesson(second);
+        Lesson third = new Lesson("Третья", "Препод 2", 3,1,5,"8-143");
+        mTimeTableData.addLesson(third);
     }
 
     @Override
@@ -37,6 +47,12 @@ public class TopFragment extends Fragment {
 
         return v;
 
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        updateUI();
     }
 
     @Override
@@ -63,6 +79,9 @@ public class TopFragment extends Fragment {
                 getActivity().invalidateOptionsMenu();
                 updateUI();
                 return true;
+            case R.id.settings:
+                Intent intent = new Intent(getActivity(),SettingsActivity.class);
+                startActivity(intent);
 
 
             default:

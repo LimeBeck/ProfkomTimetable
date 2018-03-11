@@ -66,13 +66,7 @@ public class DaysFragment extends Fragment {
 
         switch (getShownDay()){
             case 1:
-                /*mWeekday.setText(R.string.monday);
-                Lesson first = new Lesson("Первая", "Препод 1", 1,1,5,"8-143");
-                mTimeTableData.addLesson(first);
-                Lesson second = new Lesson("Вторая", "Препод 2", 2,1,5,"8-143");
-                mTimeTableData.addLesson(second);
-                Lesson third = new Lesson("Третья", "Препод 2", 3,1,5,"8-143");
-                mTimeTableData.addLesson(third);*/
+                mWeekday.setText(R.string.monday);
                 break;
             case 2:
                 mWeekday.setText(R.string.tuesday);

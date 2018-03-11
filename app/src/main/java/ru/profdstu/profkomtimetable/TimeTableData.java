@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.profdstu.profkomtimetable.LessonDbSchema.*;
+import static ru.profdstu.profkomtimetable.SettingSchema.*;
 
 /**
  * Created by metal on 03.03.2018.
@@ -46,6 +47,9 @@ public class TimeTableData {
         LessonCursorWrapper cursorWrapper = queryLessons(null, null);
         try{
                 cursorWrapper.moveToFirst();
+                if(cursorWrapper.getCount()<1){
+                    return null;
+                }
             while (!cursorWrapper.isAfterLast())
             {
                     lessons.add(cursorWrapper.getLesson());
@@ -131,5 +135,19 @@ public class TimeTableData {
     public void addLesson(Lesson lesson){
         ContentValues contentValues = getContentValues(lesson);
         mDatabase.insert(LessonTable.NAME, null, contentValues);
+    }
+
+    public String getGroupFromSettings(){
+        Cursor cursor = mDatabase.query(SettingsTable.NAME, null,SettingsTable.Cols.PARAMETER + " = ? ", new String[]{Settings.USER_GROUP}, null, null, null);
+        try {
+            cursor.moveToFirst();
+            if(cursor.getCount()==0){
+                return null;
+            }
+            return cursor.getString(cursor.getColumnIndex(SettingsTable.Cols.VALUES));
+        }
+        finally {
+            cursor.close();
+        }
     }
 }

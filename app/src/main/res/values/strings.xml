@@ -12,4 +12,9 @@
     <string name="saturday">Суббота</string>
     <string name="default_day">Ошибка с днём недели</string>
     <string name="freeday">Пар нет! Ухууууу!</string>
+    <string name="group">Введите групу</string>
+    <string name="btn_ok">Получить расписание!</string>
+    <string name="group_edit">Прям сюда пишите</string>
+    <string name="copyright">Из профкома с любовью. Все права защищены</string>
+
 </resources>
