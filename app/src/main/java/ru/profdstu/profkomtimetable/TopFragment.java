@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 /**
  * Created by metal on 11.03.2018.
  */
@@ -17,27 +19,21 @@ import android.view.ViewGroup;
 public class TopFragment extends Fragment {
 
     private TimeTableData mTimeTableData;
+    FragmentManager mFragmentManager;
     public Boolean mWeekEven = WeekCompute.IsWeekEven();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
+        mFragmentManager = getFragmentManager();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_day_list, container, false);
 
-        FragmentManager fm = getFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-
-
-        for(int day=1;day<=6;day++){
-            fragment = DaysFragment.newInstance(day);
-            fm.beginTransaction().add(R.id.day_view, fragment).commit();
-        }
+        updateUI();
 
         return v;
 
@@ -75,6 +71,25 @@ public class TopFragment extends Fragment {
     }
 
     public void updateUI() {
+
+        List<Fragment> fragments = mFragmentManager.getFragments();
+        if(fragments.size()>1){
+            for (Fragment fragment: fragments
+                 ) {
+                if(fragment!=mFragmentManager.findFragmentById(R.id.fragment_container)){
+                    mFragmentManager.beginTransaction().remove(fragment).commit();
+                }
+
+            }
+        }
+
+        Fragment fragment;
+        int week = mWeekEven?2:1;
+
+        for(int day=1;day<=6;day++){
+            fragment = DaysFragment.newInstance(day, week);
+            mFragmentManager.beginTransaction().add(R.id.day_view, fragment).commit();
+        }
 
     }
 }

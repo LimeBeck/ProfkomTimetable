@@ -23,17 +23,18 @@ import java.util.List;
 public class DaysFragment extends Fragment {
 
     private static String DAY_ARGUMENT_KEY = "day_arg";
+    private static String WEEK_ARGUMENT_KEY = "week_arg";
     TimeTableData mTimeTableData;
     List<Lesson> mLessonList;
     private TextView mFreeday;
     private TextView mWeekday;
     private boolean mWeekEven = WeekCompute.IsWeekEven();
 
-    public static DaysFragment newInstance(int day) {
+    public static DaysFragment newInstance(int day, int week) {
 
         Bundle args = new Bundle();
         args.putInt(DAY_ARGUMENT_KEY,day);
-
+        args.putInt(WEEK_ARGUMENT_KEY, week);
         DaysFragment fragment = new DaysFragment();
         fragment.setArguments(args);
         return fragment;
@@ -41,6 +42,9 @@ public class DaysFragment extends Fragment {
 
     public int getShownDay(){
         return getArguments().getInt(DAY_ARGUMENT_KEY);
+    }
+    public int getShownWeek(){
+        return getArguments().getInt(WEEK_ARGUMENT_KEY);
     }
 
     @Override
@@ -63,11 +67,11 @@ public class DaysFragment extends Fragment {
         switch (getShownDay()){
             case 1:
                 /*mWeekday.setText(R.string.monday);
-                Lesson first = new Lesson("Первая", "Препод 1", 1,2,5,"8-143");
+                Lesson first = new Lesson("Первая", "Препод 1", 1,1,5,"8-143");
                 mTimeTableData.addLesson(first);
-                Lesson second = new Lesson("Вторая", "Препод 2", 2,2,5,"8-143");
+                Lesson second = new Lesson("Вторая", "Препод 2", 2,1,5,"8-143");
                 mTimeTableData.addLesson(second);
-                Lesson third = new Lesson("Третья", "Препод 2", 3,2,5,"8-143");
+                Lesson third = new Lesson("Третья", "Препод 2", 3,1,5,"8-143");
                 mTimeTableData.addLesson(third);*/
                 break;
             case 2:
@@ -90,7 +94,7 @@ public class DaysFragment extends Fragment {
         }
 
         FragmentManager fm = getChildFragmentManager();
-        int week = WeekCompute.WeekEven();
+        int week = getShownWeek();
         int day = getShownDay();
         mLessonList = mTimeTableData.getLessonByWeekDay(week,day);
         if(mLessonList != null){
