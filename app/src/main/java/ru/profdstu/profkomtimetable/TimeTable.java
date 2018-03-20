@@ -1,6 +1,6 @@
 package ru.profdstu.profkomtimetable;
 
-
+//Todo: Оставить комментарии для всего кода
 
 import android.support.v4.app.Fragment;
 

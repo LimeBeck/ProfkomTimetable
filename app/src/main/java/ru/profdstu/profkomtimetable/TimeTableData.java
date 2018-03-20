@@ -1,11 +1,14 @@
 package ru.profdstu.profkomtimetable;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
+
 import java.util.UUID;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +31,8 @@ public class TimeTableData {
 
     private Context mContext;
     private SQLiteDatabase mDatabase;
+    private ArrayList<String> mGroups;
+    private WebHelper mWebHelper;
 
     public static TimeTableData get(Context context){
         if (sTimeTableData==null){
@@ -40,6 +45,8 @@ public class TimeTableData {
         mContext = context.getApplicationContext();
         mDatabase = new LessonBaseHelper(context).getWritableDatabase();
         mLessonsList = getLessonsList();
+        mWebHelper = WebHelper.getInstance(context);
+        mGroups = mWebHelper.getGroups();
     }
 
     public List<Lesson> getLessonsList(){
@@ -68,9 +75,7 @@ public class TimeTableData {
                 +" AND "+LessonTable.Cols.DAY_NUMBER+" = "+String.valueOf(day)+" ORDER BY "+LessonTable.Cols.DAY_NUMBER+", "+LessonTable.Cols.LESSON_NUMBER;
         Cursor raw = mDatabase.rawQuery(sql,null);
         LessonCursorWrapper cursorWrapper = new LessonCursorWrapper(raw);
-        /*LessonCursorWrapper cursorWrapper = queryLessons(LessonTable.Cols.DAY_NUMBER+ " = ? AND "+
-                LessonTable.Cols.WEEK_NUMBER+" = ? ",
-                new String[]{String.valueOf(day),String.valueOf(week)});*/
+
         try{
             cursorWrapper.moveToFirst();
             if (cursorWrapper.getCount()==0){
@@ -87,10 +92,7 @@ public class TimeTableData {
         return lessons;
     }
 
-    public int getDaysInWeek(int week){
-       int days =2;
-        return days;
-    }
+
 
     public Lesson getLessonByUUID(UUID uuid){
         LessonCursorWrapper cursorWrapper = queryLessons(LessonTable.Cols.LESSON_ID + " = ?", new String[]{uuid.toString()});
@@ -137,8 +139,12 @@ public class TimeTableData {
         mDatabase.insert(LessonTable.NAME, null, contentValues);
     }
 
-    public String getGroupFromSettings(){
-        Cursor cursor = mDatabase.query(SettingsTable.NAME, null,SettingsTable.Cols.PARAMETER + " = ? ", new String[]{Settings.USER_GROUP}, null, null, null);
+    public void clearOldLessons(){
+        mDatabase.delete(LessonTable.NAME,null,null);
+    }
+
+    public String getParameterFromSettings(String parameter){
+        Cursor cursor = mDatabase.query(SettingsTable.NAME, null,SettingsTable.Cols.PARAMETER + " = ? ", new String[]{parameter}, null, null, null);
         try {
             cursor.moveToFirst();
             if(cursor.getCount()==0){
@@ -150,4 +156,23 @@ public class TimeTableData {
             cursor.close();
         }
     }
+
+    public void setParameterToSettings(String parameter, String group){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SettingsTable.Cols.PARAMETER,parameter);
+        contentValues.put(SettingsTable.Cols.VALUES,group);
+        mDatabase.delete(SettingsTable.NAME, SettingsTable.Cols.PARAMETER+"= ?",new String[]{parameter});
+        mDatabase.insert(SettingsTable.NAME, null, contentValues);
+    }
+
+    public void updateLessons(List<Lesson> lessonsList){
+        clearOldLessons();
+        mLessonsList = lessonsList;
+        for (Lesson lesson: mLessonsList
+             ) {
+            addLesson(lesson);
+        }
+
+    }
+
 }

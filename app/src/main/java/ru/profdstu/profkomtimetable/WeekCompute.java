@@ -9,6 +9,13 @@ import java.util.GregorianCalendar;
  */
 
 public final class WeekCompute {
+    static public int Today(){
+        Date today = new Date();
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(today);
+        return calendar.get(Calendar.DAY_OF_WEEK);
+    }
+
     static private int Weeks(){
         int days;
         int firstSeptemberDay;

@@ -22,6 +22,7 @@ public class LessonFragment extends Fragment {
     private TextView mAuditory;
     private TextView mTeacher;
     private TextView mLessonNumber;
+    private TextView mTime;
 
     public static LessonFragment newInstance(String lesson_uuid) {
 
@@ -54,6 +55,7 @@ public class LessonFragment extends Fragment {
         mLessonName = (TextView) v.findViewById(R.id.lesson_name);
         mLessonNumber = (TextView) v.findViewById(R.id.lesson_number);
         mTeacher = (TextView) v.findViewById(R.id.teacher_name);
+        mTime = (TextView) v.findViewById(R.id.time);
 
 
         mLessonNumber.setText(String.valueOf(mLesson.getLessonNumber()));
@@ -61,6 +63,31 @@ public class LessonFragment extends Fragment {
         mAuditory.setText(mLesson.getAuditory());
         mLessonName.setText(mLesson.getLessonName());
 
+        switch (mLesson.getLessonNumber()){
+            case 1:
+                mTime.setText(R.string.time_lesson_1);
+                break;
+            case 2:
+                mTime.setText(R.string.time_lesson_2);
+                break;
+            case 3:
+                mTime.setText(R.string.time_lesson_3);
+                break;
+            case 4:
+                mTime.setText(R.string.time_lesson_4);
+                break;
+            case 5:
+                mTime.setText(R.string.time_lesson_5);
+                break;
+            case 6:
+                mTime.setText(R.string.time_lesson_6);
+                break;
+            default:
+                mTime.setText(null);
+        }
+
         return v;
     }
+
+
 }

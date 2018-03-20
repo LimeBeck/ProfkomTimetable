@@ -1,6 +1,8 @@
 package ru.profdstu.profkomtimetable;
 
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -87,6 +89,9 @@ public class DaysFragment extends Fragment {
                     mWeekday.setText(R.string.default_day);
         }
 
+        if((getShownDay()==(WeekCompute.Today()-1))&&(getShownWeek()==WeekCompute.WeekEven())){
+            v.setBackgroundColor(Color.CYAN);
+        }
         FragmentManager fm = getChildFragmentManager();
         int week = getShownWeek();
         int day = getShownDay();

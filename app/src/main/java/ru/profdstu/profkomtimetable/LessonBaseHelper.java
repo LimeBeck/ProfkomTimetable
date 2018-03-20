@@ -1,5 +1,6 @@
 package ru.profdstu.profkomtimetable;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -41,6 +42,12 @@ public class LessonBaseHelper extends SQLiteOpenHelper {
         "_id integer primary key autoincrement, " +
                 SettingsTable.Cols.PARAMETER+" , " + SettingsTable.Cols.VALUES+" )"
         );
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SettingsTable.Cols.PARAMETER, SettingSchema.Settings.FIRST_RUN);
+        contentValues.put(SettingsTable.Cols.VALUES, "true");
+        db.insert(SettingsTable.NAME,null, contentValues);
+
     }
 
     @Override

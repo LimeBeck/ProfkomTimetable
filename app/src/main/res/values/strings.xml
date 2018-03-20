@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Расписание ДГТУ</string>
     <string name="week_button">Неделя</string>
-    <string name="to_even_week">К нижней неделе</string>
-    <string name="to_nor_even_week">К верхней неделе</string>
+    <string name="to_even_week">К нижней</string>
+    <string name="to_nor_even_week">К верхней</string>
     <string name="settings">Настройки</string>
     <string name="monday">Понедельник</string>
     <string name="tuesday">Вторник</string>
@@ -16,5 +16,14 @@
     <string name="btn_ok">Получить расписание!</string>
     <string name="group_edit">Прям сюда пишите</string>
     <string name="copyright">Из профкома с любовью. Все права защищены</string>
+    <string name="today_upweek">Эта неделя верхняя</string>
+    <string name="today_downweek">Эта неделя нижняя</string>
+    <string name="time_lesson_1">8:30–10:05</string>
+    <string name="time_lesson_2">10:15–11:50</string>
+    <string name="time_lesson_3">12:00–13:35</string>
+    <string name="time_lesson_4">14:15–15:50</string>
+    <string name="time_lesson_5">16:00–17:35</string>
+    <string name="time_lesson_6">17:45–19:20</string>
+    <string name="time_lesson_7">19:30–21:05</string>
 
 </resources>

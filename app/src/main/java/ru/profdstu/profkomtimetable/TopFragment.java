@@ -5,6 +5,7 @@ import android.media.audiofx.Equalizer;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +21,7 @@ import java.util.List;
 
 public class TopFragment extends Fragment {
 
+    //Todo: Сохранить неделю при повороте экрана
     private TimeTableData mTimeTableData;
     FragmentManager mFragmentManager;
     public Boolean mWeekEven = WeekCompute.IsWeekEven();
@@ -29,20 +31,23 @@ public class TopFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mFragmentManager = getFragmentManager();
-
         mTimeTableData = TimeTableData.get(getContext());
-        Lesson first = new Lesson("Первая", "Препод 1", 1,1,5,"8-143");
-        mTimeTableData.addLesson(first);
-        Lesson second = new Lesson("Вторая", "Препод 2", 2,1,5,"8-143");
-        mTimeTableData.addLesson(second);
-        Lesson third = new Lesson("Третья", "Препод 2", 3,1,5,"8-143");
-        mTimeTableData.addLesson(third);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_day_list, container, false);
-
+        String firstUseParameter = mTimeTableData.getParameterFromSettings(SettingSchema.Settings.FIRST_RUN);
+        Boolean mFirstUse;
+        if(firstUseParameter.contentEquals("true")){
+            mFirstUse = true;
+        }
+        else{
+            mFirstUse = false;
+        }
+        if(mFirstUse){
+            startSettingsActivity();
+        }
         updateUI();
 
         return v;
@@ -62,8 +67,10 @@ public class TopFragment extends Fragment {
         MenuItem weekButton = menu.findItem(R.id.change_week);
         if (mWeekEven) {
             weekButton.setTitle(R.string.to_nor_even_week);
+            //weekButton.setIcon(R.drawable.ic_to_up_week);
         } else {
             weekButton.setTitle(R.string.to_even_week);
+            //weekButton.setIcon(R.drawable.ic_to_down_week);
         }
 
         MenuItem settingsButton = menu.findItem(R.id.settings);
@@ -80,13 +87,17 @@ public class TopFragment extends Fragment {
                 updateUI();
                 return true;
             case R.id.settings:
-                Intent intent = new Intent(getActivity(),SettingsActivity.class);
-                startActivity(intent);
-
+                startSettingsActivity();
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void startSettingsActivity(){
+        Intent intent = new Intent(getActivity(),SettingsActivity.class);
+        startActivity(intent);
     }
 
     public void updateUI() {
@@ -109,6 +120,16 @@ public class TopFragment extends Fragment {
             fragment = DaysFragment.newInstance(day, week);
             mFragmentManager.beginTransaction().add(R.id.day_view, fragment).commit();
         }
+        createSubtitle();
+    }
 
+    private void createSubtitle(){
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        if(WeekCompute.IsWeekEven()){
+            activity.getSupportActionBar().setSubtitle(R.string.today_downweek);
+        }
+        else {
+            activity.getSupportActionBar().setSubtitle(R.string.today_upweek);
+        }
     }
 }
