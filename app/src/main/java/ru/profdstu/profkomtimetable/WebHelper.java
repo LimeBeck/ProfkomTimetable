@@ -36,7 +36,7 @@ public class WebHelper {
     private List<Lesson> mLessonList;
 
 
-    public static ArrayList<String> mGroups;
+    public static List<String> mGroups;
 
 
     public static synchronized WebHelper getInstance(Context context) {
@@ -66,7 +66,7 @@ public class WebHelper {
     }
 
 
-    public ArrayList<String> getGroups() {
+    public List<String> getGroups() {
         return mGroups;
     }
 
@@ -97,28 +97,28 @@ public class WebHelper {
         addToRequestQueue(jsonObjectRequest);
     }
 
-    public void makeLessonsRequest(String group, final VolleyCallback callback, final TimeTableData timeTableData){
+    public void makeLessonsRequest(String group, final VolleyCallback callback, final TimeTableData timeTableData) {
         mLessonList = new ArrayList<>();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, sheduleUrl + group, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray array = response.getJSONArray(LessonDbSchema.LessonJSON.JSON_ROOT_NODE_NAME);
-                    for(int i=0; i<array.length(); i++){
+                    for (int i = 0; i < array.length(); i++) {
                         JSONObject jsonObject = array.getJSONObject(i);
                         Boolean duplicateWeek = false;
                         int lessonNumber = jsonObject.getInt(LessonDbSchema.LessonJSON.JsonCols.LESSON_NUMBER);
                         int dayNumber = jsonObject.getInt(LessonDbSchema.LessonJSON.JsonCols.DAY_NUMBER);
-                        int weekNumber=1;
-                        switch (jsonObject.getString(LessonDbSchema.LessonJSON.JsonCols.WEEK_NUMBER)){
+                        int weekNumber = 1;
+                        switch (jsonObject.getString(LessonDbSchema.LessonJSON.JsonCols.WEEK_NUMBER)) {
                             case " ":
-                                duplicateWeek=true;
+                                duplicateWeek = true;
                                 break;
                             case "Ч":
-                                weekNumber=2;
+                                weekNumber = 2;
                                 break;
                             case "Н":
-                                weekNumber=1;
+                                weekNumber = 1;
                                 break;
                         }
 
@@ -126,21 +126,28 @@ public class WebHelper {
                         String lessonType = jsonObject.getString(LessonDbSchema.LessonJSON.JsonCols.LESSON_TYPE);
                         String lessonName = jsonObject.getString(LessonDbSchema.LessonJSON.JsonCols.LESSON_NAME);
                         String teacherName = jsonObject.getString(LessonDbSchema.LessonJSON.JsonCols.TEACHER_NAME);
-                        switch (lessonType){
-                            case "Лабораторные":
-                                lessonName = "лаб. "+lessonName;
+                        switch (lessonType.toLowerCase()) {
+                            case "лабораторные": {
+                                lessonName = "лаб. " + lessonName;
                                 break;
-                            case "пр. зан.":
-                                lessonName = lessonName = "пр. "+lessonName;
+                            }
+                            case "пр. зан.": {
+                                lessonName = lessonName = "пр. " + lessonName;
                                 break;
-                            case "лекция":
-                                lessonName = lessonName = "лек. "+lessonName;
+                            }
+                            case "лекция": {
+                                lessonName = lessonName = "лек. " + lessonName;
                                 break;
+                            }
+                            case "факультатив": {
+                                lessonName = lessonName = "фак. " + lessonName;
+                                break;
+                            }
                         }
-                        Lesson lesson = new Lesson(lessonName,teacherName, lessonNumber, weekNumber,dayNumber, auditory);
+                        Lesson lesson = new Lesson(lessonName, teacherName, lessonNumber, weekNumber, dayNumber, auditory);
                         mLessonList.add(lesson);
-                        if(duplicateWeek){
-                            lesson = new Lesson(lessonName,teacherName, lessonNumber, weekNumber+1,dayNumber, auditory);
+                        if (duplicateWeek) {
+                            lesson = new Lesson(lessonName, teacherName, lessonNumber, weekNumber + 1, dayNumber, auditory);
                             mLessonList.add(lesson);
                         }
                         timeTableData.updateLessons(getLessonList());
@@ -160,7 +167,7 @@ public class WebHelper {
         addToRequestQueue(jsonObjectRequest);
     }
 
-    public interface VolleyCallback{
+    public interface VolleyCallback {
         void onSuccess();
     }
 

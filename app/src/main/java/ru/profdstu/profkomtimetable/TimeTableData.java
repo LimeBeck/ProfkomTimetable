@@ -31,7 +31,7 @@ public class TimeTableData {
 
     private Context mContext;
     private SQLiteDatabase mDatabase;
-    private ArrayList<String> mGroups;
+    private List<String> mGroups;
     private WebHelper mWebHelper;
 
     public static TimeTableData get(Context context){

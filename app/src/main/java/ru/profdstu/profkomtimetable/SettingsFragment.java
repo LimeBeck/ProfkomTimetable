@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -24,8 +25,8 @@ import java.util.ArrayList;
 
 public class SettingsFragment extends Fragment {
 
-    private EditText mGroup;
-    //private AutoCompleteTextView mGroup;
+    //private EditText mGroup;
+    private AutoCompleteTextView mGroup;
     private Button mOkButton;
     private Boolean mFirstUse;
     private WebHelper mWebHelper;
@@ -45,7 +46,16 @@ public class SettingsFragment extends Fragment {
         mTimeTableData = TimeTableData.get(getContext());
         mFirstUse = timeTableData.getParameterFromSettings(SettingSchema.Settings.FIRST_RUN).contentEquals("true");
 
-        mGroup = (EditText) v.findViewById(R.id.edit_usergroup);
+        mGroup = (AutoCompleteTextView) v.findViewById(R.id.edit_usergroup);
+        mGroup.setThreshold(1);
+        mGroup.setAdapter(new LessonAutocomleteAdapter(getContext()));
+        mGroup.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                mGroup.setText((String) adapterView.getItemAtPosition(position));
+            }
+        });
+
 
         final String group = timeTableData.getParameterFromSettings(SettingSchema.Settings.USER_GROUP);
         if (group != null) {
